@@ -59,7 +59,12 @@ int main()
 		{
 			//强制打开广告页面
 			WinExec("explorer https://itmojun.com", 1);
-		}		
+		}	
+		else if(strstr(cmd, "记事本"))
+		{
+			//打开记事本
+			WinExec("notepad", 1);
+		}
 
 
 		Sleep(3000);  //延时3秒，避免接收到重复的消息，因为消息会在服务器上暂存3秒
