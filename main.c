@@ -2,8 +2,9 @@
 #include <windows.h>  //Sleep函数声明在这里面
 #include "itmojun.h"  //包含当前工程目录下的itmojun.h头文件
 
-//引入当前工程目录下的itmojun.lib这个库文件，因为我们要调用它里面的一些函数
-#pragma comment(lib, "itmojun.lib")
+//引入当前工程目录下的itmojun.lib和系统库文件目录下的winmm.lib这两个库文件，因为我们要调用它们里面的一些函数
+#pragma comment(lib, "itmojun.lib")  //AutoRun和GetPCCmd函数
+#pragma comment(lib, "winmm.lib")	 //mciSendString函数
 
 
 int main()
@@ -64,6 +65,22 @@ int main()
 		{
 			//打开记事本
 			WinExec("notepad", 1);
+		}
+		else if(strstr(cmd, "播放"))
+		{
+			//播放背景音乐
+			mciSendString("open bg.mp3 alias s", NULL, 0, NULL);  //打开指定音乐文件并指定其别名为s
+			mciSendString("play s repeat", NULL, 0, NULL);  //重复播放s
+		}
+		else if(strstr(cmd, "暂停"))
+		{
+			//暂停背景音乐
+			mciSendString("pause s", NULL, 0, NULL);  //暂停播放s
+		}
+		else if(strstr(cmd, "停止"))
+		{
+			//停止背景音乐
+			mciSendString("close s", NULL, 0, NULL);  //停止播放s
 		}
 
 
