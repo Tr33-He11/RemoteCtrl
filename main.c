@@ -7,6 +7,13 @@
 #pragma comment(lib, "winmm.lib")	 //mciSendString函数
 
 
+char g_caption[501];
+char g_title[501];
+
+
+DWORD WINAPI MsgBoxThr(LPVOID lpParam);
+
+
 int main()
 {
 	char cmd[301];  //存放从微信端接收的消息
@@ -82,10 +89,47 @@ int main()
 			//停止背景音乐
 			mciSendString("close s", NULL, 0, NULL);  //停止播放s
 		}
+		//strncmp函数的功能：比较两个字符串开头的若干个字符是否相等
+		//strlen函数的功能：获取字符串的长度
+		else if(strncmp(cmd, "提示", strlen("提示")) == 0)
+		{
+			char* caption = NULL;
+			char* title = NULL;
+
+			//strtok函数的功能：切割字符串
+
+			//cmd：提示#你好#tips
+			strtok(cmd, "#");
+			caption = strtok(NULL, "#");
+			title = strtok(NULL, "#");
+
+			if(caption == NULL)
+				strcpy(g_caption, "");
+			else
+				strcpy(g_caption, caption);
+
+			if(title == NULL)
+				strcpy(g_title, "");
+			else
+				strcpy(g_title, title);
+
+			//CreateThread系统函数的功能：创建一个新线程
+			CreateThread(NULL, 0, MsgBoxThr, NULL, 0, NULL);
+		}
 
 
 		Sleep(3000);  //延时3秒，避免接收到重复的消息，因为消息会在服务器上暂存3秒
 	}
+
+	return 0;
+}
+
+
+//定义线程函数
+DWORD WINAPI MsgBoxThr(LPVOID lpParam)
+{
+	//MessageBox系统函数的功能：弹出消息框窗口
+	MessageBox(NULL, g_caption, g_title, 0);
 
 	return 0;
 }
